@@ -1,0 +1,50 @@
+[project]
+name = "riftquant"
+version = "0.1.0"
+description = "Data foundation for pro League of Legends win-probability modeling."
+requires-python = ">=3.12"
+dependencies = [
+  "httpx>=0.27",
+  "polars>=1.0",
+  "duckdb>=1.0",
+  "pydantic>=2.0",
+  "typer>=0.12",
+  "tenacity>=8.2",
+  # stock Windows Python ships no IANA tz database; polars needs one for any
+  # tz-aware datetime op (e.g. .max()/.min()) on our UTC timestamp columns.
+  "tzdata; platform_system == 'Windows'",
+  # M2 pregame model + rating layer (docs/specs/M2-pregame-model-brief.md).
+  "openskill>=6.0",
+  "scikit-learn>=1.5",
+  "lightgbm>=4.5",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.5",
+]
+
+[project.scripts]
+riftquant = "riftquant.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/riftquant"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "live: hits real network APIs, opt-in only (pytest -m live)",
+]
+addopts = "-m \"not live\""

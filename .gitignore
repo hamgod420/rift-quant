@@ -1,0 +1,23 @@
+# data lake -- never commit raw/processed data or run logs
+data/
+*.parquet
+*.duckdb
+*.csv
+*.log
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+.pytest_cache/
+dist/
+
+# secrets
+.env
+*.key
+secrets*
+
+# scratch
+scratch*
+notebooks/.ipynb_checkpoints/
